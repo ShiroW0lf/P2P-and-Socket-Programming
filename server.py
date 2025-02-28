@@ -1,54 +1,90 @@
 import socket
-import threading
+import hashlib
+import pickle
+import tkinter as tk
+from tkinter import scrolledtext, simpledialog
 
-clients = []  # List to store connected clients
+class DHTClient:
+    def __init__(self, host, port, username):
+        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client_socket.connect((host, port))
+        
+        # Peer ID generation (hash of username)
+        self.peer_id = hashlib.sha256(username.encode('utf-8')).hexdigest()
+        self.username = username
+        
+        # Join the DHT network
+        self.join_network()
+        
+        # UI setup
+        self.root = tk.Tk()
+        self.root.title(f"Peer Chat - {self.username}")
 
-def handle_client(client_socket, username):
-    """Handles receiving messages from a client and broadcasting to all other clients."""
-    while True:
-        try:
-            message = client_socket.recv(1024).decode("utf-8")
-            if not message:
-                break
-            broadcast(message, client_socket)
-        except:
-            break
+        self.chat_box = scrolledtext.ScrolledText(self.root, wrap=tk.WORD, width=50, height=20)
+        self.chat_box.pack(pady=10)
+        self.chat_box.config(state=tk.DISABLED)
 
-    print(f"[INFO] {username} disconnected.")
-    clients.remove((client_socket, username))
-    broadcast(f"[INFO] {username} has left the chat.", client_socket)
-    client_socket.close()
+        self.message_entry = tk.Entry(self.root, width=40)
+        self.message_entry.pack(side=tk.LEFT, padx=5)
 
-def broadcast(message, sender_socket=None):
-    """Sends a message to all connected clients except the sender."""
-    print(f"Broadcasting: {message}")
-    for client_socket, _ in clients:
-        if client_socket != sender_socket:
+        self.send_button = tk.Button(self.root, text="Send", command=self.send_message)
+        self.send_button.pack(side=tk.LEFT, padx=5)
+
+        threading.Thread(target=self.receive_messages, daemon=True).start()
+
+        self.root.mainloop()
+
+    def join_network(self):
+        """Join the DHT network by sending a JOIN request."""
+        join_message = {"command": "JOIN", "peer_id": self.peer_id, "peer_info": (self.username, self.client_socket.getsockname())}
+        self.client_socket.send(pickle.dumps(join_message))
+        
+        # Wait for the server's acknowledgment
+        response = self.client_socket.recv(1024)
+        response = pickle.loads(response)
+        print(f"Server response: {response}")
+
+    def send_message(self):
+        """Send a message to another peer."""
+        message = self.message_entry.get()
+        if message.strip():
+            # Look up the recipient peer using their peer ID (you would normally lookup a specific peer)
+            peer_id_to_lookup = hashlib.sha256("OtherUser".encode('utf-8')).hexdigest()  # Example ID
+            
+            lookup_message = {"command": "LOOKUP", "peer_id": peer_id_to_lookup}
+            self.client_socket.send(pickle.dumps(lookup_message))
+            
+            response = self.client_socket.recv(1024)
+            response = pickle.loads(response)
+            if response["status"] == "FOUND":
+                recipient_info = response["peer_info"]
+                print(f"Found peer {recipient_info}")
+                # You can now establish direct communication with this peer (e.g., through socket)
+                # Send your message to the peer
+                
+            self.display_message(f"Me: {message}")
+            self.message_entry.delete(0, tk.END)
+
+    def receive_messages(self):
+        """Receives messages from the server and displays them in the UI."""
+        while True:
             try:
-                client_socket.send(message.encode("utf-8"))
-            except:
-                clients.remove((client_socket, _))
+                message = self.client_socket.recv(1024).decode('utf-8')
+                if message:
+                    self.display_message(message)
+            except socket.error:
+                print("Server disconnected.")
+                break
 
-def start_server(host="127.0.0.1", port=5000):
-    """Starts the chat server."""
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((host, port))
-    server.listen(5)
-    print(f"[INFO] Server listening on {host}:{port}")
-
-    while True:
-        client_socket, addr = server.accept()
-        print(f"[NEW CONNECTION] {addr}")
-
-        client_socket.send("USERNAME_REQUEST".encode("utf-8"))
-        username = client_socket.recv(1024).decode("utf-8")
-        clients.append((client_socket, username))
-
-        print(f"[INFO] {username} joined the chat.")
-        broadcast(f"[INFO] {username} joined the chat.", client_socket)
-
-        # Start handling client in a separate thread
-        threading.Thread(target=handle_client, args=(client_socket, username), daemon=True).start()
+    def display_message(self, message):
+        """Updates chat UI with new messages."""
+        self.chat_box.config(state=tk.NORMAL)
+        self.chat_box.insert(tk.END, f"{message}\n")
+        self.chat_box.yview(tk.END)
+        self.chat_box.config(state=tk.DISABLED)
 
 if __name__ == "__main__":
-    start_server()
+    host = "127.0.0.1"  # IP of the DHT server
+    port = 5000          # Port for the DHT server
+    username = simpledialog.askstring("Username", "Enter your username:")
+    DHTClient(host, port, username)
