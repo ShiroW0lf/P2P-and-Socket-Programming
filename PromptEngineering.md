@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Prompt Engineering for P2P Chat Application
 
 ## Overview
