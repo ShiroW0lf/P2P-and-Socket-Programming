@@ -1,10 +1,9 @@
 # Peer-to-Peer Chat Application
 
 ## Overview
-This is a simple Peer-to-Peer (P2P) chat application that allows two users to communicate over a network using sockets. One user acts as the host, while the other joins as a peer.
-
+This is a simple Peer-to-Peer (P2P) chat application utilizing a Distributed Hash Table (DHT) for peer lookup and message routing. One user acts as the host, while the other joins as a peer without a central server.
 ## Features
-- Host a chat session and wait for a peer to connect.
+- Host a chat session and wait for a peer to connect using a DHT network.
 - Join an existing chat session using the host's IP address.
 - Modern, user-friendly graphical interface (GUI) using Tkinter.
 - Real-time message exchange between peers.
