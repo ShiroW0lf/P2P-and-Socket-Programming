@@ -65,39 +65,5 @@ Ensure you have Python installed on your system.
 
 Enjoy chatting! 🎉
 
---
-
-### ✅ **Initial Requirements vs. This Implementation**  
-
-| Requirement | Implemented? | Notes |
-|-------------|-------------|--------|
-| **Peer-to-Peer Communication** | ✅ Yes | Users can host or join a chat directly. |
-| **Socket-based Communication** | ✅ Yes | Uses Python’s `socket` module for TCP-based messaging. |
-| **GUI with Tkinter** | ✅ Yes | Clean, modern interface built with Tkinter. |
-| **Sending & Receiving Messages** | ✅ Yes | Messages are sent over sockets and displayed in the UI. |
-| **Host/Join Mechanism** | ✅ Yes | A welcome screen lets users choose to **host** or **join** a chat. |
-| **Message Input Field** | ✅ Yes | Users can type and send messages with **Enter key support**. |
-| **Scrollable Chat Window** | ✅ Yes | Uses `scrolledtext.ScrolledText` for a better chat experience. |
-| **Automatic Message Display** | ✅ Yes | New messages appear automatically, with **auto-scrolling**. |
-| **Connection Status Display** | ✅ Yes | Status updates dynamically when a peer connects/disconnects. |
-| **Error Handling** | ✅ Yes | Alerts for connection failures & auto-recovery. |
-| **Graceful Exit** | ✅ Yes | Closes sockets properly when the app shuts down. |
-
----
-
-### **💡 What’s Improved Beyond the Minimum Requirements?**
-🚀 **Modern UI with Dark Mode** – Clean, Discord-like theme.  
-🚀 **Welcome Screen for Better UX** – Reduces confusion when starting.  
-🚀 **Connection Errors are Handled Gracefully** – No crashes on failed connections.  
-🚀 **Enter Key to Send Messages** – More intuitive than clicking "Send" every time.  
-🚀 **Live Connection Status Updates** – Always know if you're connected.  
-🚀 **Auto-Scrolling Messages** – No need to scroll manually.  
-
----
-
-### **🔍 What's Missing? (Extra Credit Features)**
-❌ **File Transfer** – Not included yet.  
-❌ **Multiple Clients in One Chat** – Currently only supports **1:1 chat**.  
-❌ **Encryption for Messages** – Not implemented.  
 
 
