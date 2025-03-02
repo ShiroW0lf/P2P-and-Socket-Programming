@@ -12,7 +12,7 @@ BUTTON_COLOR = "#7289DA"
 ENTRY_BG = "#23272A"
 FONT = ("Arial", 12)
 
-class GroupChat:
+class Chat:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Group Chat")
@@ -141,4 +141,4 @@ class GroupChat:
         self.root.destroy()
 
 if __name__ == "__main__":
-    GroupChat()
+    Chat()
