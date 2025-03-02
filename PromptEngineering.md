@@ -198,4 +198,4 @@ To simplify joining a chat, an additional request was made:
 ## Conclusion
 Through iterative prompt engineering, the P2P chat application evolved from a basic connection mechanism to a fully functional, user-friendly chat tool. Each technical refinement was achieved by systematically identifying pain points and generating precise prompts to address them. This structured approach ensured that the final implementation met usability, stability, and functionality requirements.
 
->>>>>>> 58c067970b9f1e3dd552a4e06e6f78cfd3e42e55
+
