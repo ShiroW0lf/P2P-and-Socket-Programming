@@ -26,12 +26,12 @@ This is a peer-to-peer group chat application that allows users to either host a
    ```
 
 ## How to Run
-The application consists of a single script (`GroupChat.py`). It can be run in two different modes:
+The application consists of a single script (`ChatApp.py`). It can be run in two different modes:
 
 ### Hosting a Chat Session
 1. Run the script:
    ```sh
-   python GroupChat.py
+   python Chat.py
    ```
 2. Enter a username and click on "Host a Chat."
 3. The server will start listening for connections. Your system's local IP address is required for peers to join.
@@ -54,7 +54,7 @@ The application consists of a single script (`GroupChat.py`). It can be run in t
 ### Joining a Chat Session
 1. Run the script:
    ```sh
-   python GroupChat.py
+   python Chat.py
    ```
 2. Enter a username and click on "Join a Chat."
 3. Enter the host's IP address when prompted.
@@ -81,6 +81,5 @@ The application consists of a single script (`GroupChat.py`). It can be run in t
 - Enhancing security with encryption.
 - Implementing a GUI-based IP address detection feature.
 
-## Credits
-Developed by [Your Name].
+
 
